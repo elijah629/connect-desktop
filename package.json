@@ -1,0 +1,114 @@
+{
+	"name": "connect-desktop",
+	"productName": "connect-desktop",
+	"version": "1.0.0",
+	"description": "Connect's desktop application",
+	"main": ".webpack/main/main.js",
+	"scripts": {
+		"start": "electron-forge start",
+		"package": "electron-forge package",
+		"make": "electron-forge make",
+		"publish": "electron-forge publish",
+		"lint": "npx eslint . --fix && npx prettier . --write && npx stylelint **/*.css --fix"
+	},
+	"keywords": [],
+	"author": {
+		"name": "Elijah629"
+	},
+	"license": "MIT",
+	"config": {
+		"forge": {
+			"packagerConfig": {
+				"icon": "./src/assets/images/connect-icon.png"
+			},
+			"makers": [
+				{
+					"name": "@electron-forge/maker-squirrel",
+					"config": {
+						"name": "Connect"
+					}
+				},
+				{
+					"name": "@electron-forge/maker-zip",
+					"platforms": [
+						"darwin"
+					]
+				},
+				{
+					"name": "@electron-forge/maker-deb",
+					"config": {}
+				},
+				{
+					"name": "@electron-forge/maker-rpm",
+					"config": {}
+				}
+			],
+			"plugins": [
+				{
+					"name": "@electron-forge/plugin-webpack",
+					"config": {
+						"mainConfig": "./webpack.main.config.js",
+						"devContentSecurityPolicy": "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' firebase.googleapis.com firebaseinstallations.googleapis.com www.google-analytics.com identitytoolkit.googleapis.com content-firebaseappcheck.googleapis.com securetoken.googleapis.com; script-src-elem 'self' www.googletagmanager.com apis.google.com www.google.com www.gstatic.com; frame-src connect-spa.firebaseapp.com www.google.com;",
+						"renderer": {
+							"config": "./webpack.renderer.config.js",
+							"entryPoints": [
+								{
+									"html": "./src/public/html/index.html",
+									"js": "./src/public/ts/renderer.tsx",
+									"name": "main_window",
+									"preload": {
+										"js": "./src/public/ts/preload.ts"
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	},
+	"devDependencies": {
+		"@electron-forge/cli": "^6.0.0-beta.66",
+		"@electron-forge/maker-deb": "^6.0.0-beta.66",
+		"@electron-forge/maker-rpm": "^6.0.0-beta.66",
+		"@electron-forge/maker-squirrel": "^6.0.0-beta.66",
+		"@electron-forge/maker-zip": "^6.0.0-beta.66",
+		"@electron-forge/plugin-webpack": "^6.0.0-beta.66",
+		"@types/marked": "^4.0.7",
+		"@types/react": "^18.0.21",
+		"@types/react-dom": "^18.0.6",
+		"@typescript-eslint/eslint-plugin": "^5.40.1",
+		"@typescript-eslint/parser": "^5.40.1",
+		"autoprefixer": "^10.4.12",
+		"css-loader": "^6.7.1",
+		"electron": "^21.0.1",
+		"electron-devtools-installer": "^3.2.0",
+		"eslint": "^8.26.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-react": "^7.31.10",
+		"fork-ts-checker-webpack-plugin": "^7.2.13",
+		"html-loader": "^4.2.0",
+		"node-loader": "^2.0.0",
+		"postcss": "^8.4.17",
+		"postcss-loader": "^7.0.1",
+		"prettier": "^2.7.1",
+		"style-loader": "^3.3.1",
+		"stylelint": "^14.14.0",
+		"stylelint-config-prettier": "^9.0.3",
+		"stylelint-config-standard": "^29.0.0",
+		"tailwindcss": "^3.1.8",
+		"ts-loader": "^9.4.1",
+		"typescript": "~4.5.4",
+		"webpack": "^5.74.0"
+	},
+	"dependencies": {
+		"@msgpack/msgpack": "^2.8.0",
+		"electron-squirrel-startup": "^1.0.0",
+		"firebase": "^9.14.0",
+		"marked": "^4.2.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-icons": "^4.6.0",
+		"react-router-dom": "^6.4.3"
+	}
+}
