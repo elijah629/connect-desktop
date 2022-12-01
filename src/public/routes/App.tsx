@@ -17,13 +17,3 @@ export class App extends React.Component {
 		);
 	}
 }
-/**
- * ID's:
- *
- * Chats ( Guilds ):
- * SHA-256 of an increacing number that is on the server
- *
- * Rooms ( Channels ):
- * UUID v5 with namespace of the chat's increacing number ( not hash ) and name of the hash
- *
- */

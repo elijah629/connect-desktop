@@ -1,10 +1,24 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, shell } from "electron";
 import { EventController } from "./modules/eventController/index";
+import * as settings from "electron-settings";
+
+type SettingsValue =
+	| null
+	| boolean
+	| string
+	| number
+	| SettingsObject
+	| SettingsValue[];
+
+type SettingsObject = {
+	[key: string]: SettingsValue;
+};
 
 import installExtension, {
 	REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
+import { isType } from "./modules/utils";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -25,11 +39,6 @@ const launchApp = () => {
 		},
 		frame: false
 	});
-
-	// window.webContents.on("will-navigate", (e, url) => {
-	// 	e.preventDefault();
-	// 	shell.openExternal(url);
-	// });
 
 	EventController.listen("app", (e, command: string) => {
 		const win = BrowserWindow.fromWebContents(e.sender)!;
@@ -55,6 +64,20 @@ const launchApp = () => {
 		}
 	});
 
+	EventController.listen("settings", (event, command: string, ...args) => {
+		switch (command) {
+			case "get":
+				return settings.getSync();
+			case "set":
+				if (isType<SettingsObject>(args[0])) {
+					settings.setSync(args[0]);
+				}
+				break;
+			case "file":
+				return settings.file();
+		}
+	});
+
 	const windowEvents = new EventController(window.webContents);
 
 	window.on("maximize", () => {
@@ -72,36 +95,16 @@ const launchApp = () => {
 };
 
 app.whenReady().then(() => {
-	installExtension(REACT_DEVELOPER_TOOLS)
-		.then(name => console.log(`Developer Extension '${name}' added`))
-		.catch(e => console.error(e));
+	if (!app.isPackaged) {
+		installExtension(REACT_DEVELOPER_TOOLS)
+			.then(name =>
+				console.debug(
+					`[Main:Debug:DeveloperExtensions] Developer Extension "${name}" added`
+				)
+			)
+			.catch(e => console.error("[Main:Error:DeveloperExtensions]", e));
+	}
 
-	// const client = new Auth0.Client({
-	// 	keytar: {
-	// 		service: "connect-oauth"
-	// 	},
-	// 	auth0: {
-	// 		clientId: "1KwETsj3JZk1PSrmuFCJqfVyXBOnfg25",
-	// 		domain: "connect-org.us.auth0.com",
-	// 		audience: "https://connect-org.us.auth0.com/api/v2/",
-	// 		scopes: [
-	// 			"openid",
-	// 			"profile",
-	// 			"offline_access",
-	// 			"email",
-	// 			"read:current_user",
-	// 			"update:current_user_metadata",
-	// 			"create:current_user_metadata"
-	// 		]
-	// 	},
-	// 	window: {
-	// 		width: 470,
-	// 		height: 680,
-	// 		resizable: false,
-	// 		icon: "../assets/images/connect-icon.png"
-	// 	}
-	// });
-	// client.login().then(launchApp);
 	launchApp();
 	app.on(
 		"activate",

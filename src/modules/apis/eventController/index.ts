@@ -10,7 +10,7 @@ interface EventControllerApiType {
 	): void;
 }
 
-export const EventControllerAPI: Api<EventControllerApiType> = {
+export const EventControllerApi: Api<EventControllerApiType> = {
 	key: "EventController",
 	api: {
 		emit: EventController.emit,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 module.exports = {
 	entry: "./src/index.ts",
-	// mode: "production",
+	mode: "production",
 	target: "electron-main",
 	module: {
 		rules: require("./webpack.rules")

@@ -13,16 +13,16 @@ const api: AppApiType = {
 	close: () => EventController.emit("app", "close"),
 	minimize: () => EventController.emit("app", "minimize"),
 	maximizeRestore: () => EventController.emit("app", "maximize-restore"),
-	isMaximized: () => {
-		const isMaximized = EventController.call("app", "isMaximized");
+	isMaximized: async () => {
+		const isMaximized = await EventController.call("app", "isMaximized");
 
-		if (isType<Promise<boolean>>(isMaximized)) {
+		if (isType<boolean>(isMaximized)) {
 			return isMaximized;
 		}
 	}
 };
 
-export const AppAPI: Api<AppApiType> = {
+export const AppApi: Api<AppApiType> = {
 	key: "app",
 	api: api
 };

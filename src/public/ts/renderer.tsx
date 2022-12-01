@@ -15,6 +15,11 @@ import { marked } from "marked";
 
 import * as ReactDOM from "react-dom/client";
 import * as React from "react";
+import {
+	StyledEngineProvider,
+	ThemeProvider,
+	createTheme
+} from "@mui/material/styles";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -25,10 +30,17 @@ import {
 	setPersistence,
 	signInWithPopup,
 	indexedDBLocalPersistence,
-	User
+	User,
+	updateProfile
 } from "firebase/auth";
+import { ErrorBoundary } from "../components/Error/ErrorBoundary";
+import { showBanner } from "./devtools";
 // import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 // import { App } from "../components/App";
+
+console.clear();
+
+showBanner();
 
 marked.use({
 	breaks: true,
@@ -101,34 +113,19 @@ const auth = getAuth(app);
 // 	isTokenAutoRefreshEnabled: true
 // });
 
-// const response = await signInWithPopup(auth, new GithubAuthProvider());
-
-// onAuthStateChanged(auth, user => {
-// 	if (user) {
-// 		console.debug(user.metadata);
-// 	} else {
-// 		console.debug("Logged out");
-// 	}
-// });
-
-const router = createMemoryRouter([
-	{
-		path: "/",
-		element: <Auth auth={auth} />
-	},
-	{
-		path: "/app",
-		element: <App />
-	}
-]);
-
 let user: User;
 
 const unsubscribe = onAuthStateChanged(auth, async _user => {
 	if (_user) {
-		console.debug("Logged in");
 		// User is logged in through persistence
+
 		user = _user;
+
+		console.debug(
+			`[Renderer:Debug:Auth] Logged in as ${
+				user.displayName ?? user.email
+			}`
+		);
 	} else {
 		// User is not logged in, set persistance to not expire until signout, then issue login popup
 		await setPersistence(auth, indexedDBLocalPersistence);
@@ -139,9 +136,30 @@ const unsubscribe = onAuthStateChanged(auth, async _user => {
 
 unsubscribe();
 
+const router = createMemoryRouter([
+	{
+		path: "/",
+		element: <Auth auth={auth} />,
+		errorElement: <ErrorBoundary />
+	},
+	{
+		path: "/app",
+		element: <App />,
+		errorElement: <ErrorBoundary />
+	}
+]);
+
+console.debug(
+	`[Renderer:Debug:Settings] Settings file path is "${await window.settings.file()}"`
+);
+
 const root = ReactDOM.createRoot($("main"));
 root.render(
 	<React.StrictMode>
-		<RouterProvider router={router} />
+		<StyledEngineProvider injectFirst>
+			{/* <ThemeProvider theme={MUITheme}> */}
+			<RouterProvider router={router} />
+			{/* </ThemeProvider> */}
+		</StyledEngineProvider>
 	</React.StrictMode>
 );

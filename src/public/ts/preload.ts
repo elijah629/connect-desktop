@@ -1,6 +1,7 @@
 import { loadApis } from "../../modules/apis";
 
-import { EventControllerAPI } from "../../modules/apis/eventController";
-import { AppAPI } from "../../modules/apis/app";
+import { EventControllerApi } from "../../modules/apis/eventController";
+import { AppApi } from "../../modules/apis/app";
+import { SettingsApi } from "../../modules/apis/settings";
 
-loadApis([AppAPI, EventControllerAPI]);
+loadApis([AppApi, EventControllerApi, SettingsApi]);

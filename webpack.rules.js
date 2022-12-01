@@ -4,8 +4,9 @@ module.exports = [
 		// We're specifying native_modules in the test because the asset relocator loader generates a
 		// "fake" .node file which is really a cjs file.
 
-		// test: /(native_modules|node_modules)\/.+\.node$/,
-		test: /\.node$/,
+		// node_modules because i got an error and this fixed it
+
+		test: /(native_modules|node_modules)\/.+\.node$/i,
 		use: "node-loader"
 	},
 	{
