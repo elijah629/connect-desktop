@@ -109,7 +109,7 @@
 		"@emotion/react": "^11.10.5",
 		"@emotion/styled": "^11.10.5",
 		"@msgpack/msgpack": "^2.8.0",
-		"@mui/material": "^5.10.15",
+		"@mui/material": "^5.11.10",
 		"electron-settings": "^4.0.2",
 		"electron-squirrel-startup": "^1.0.0",
 		"firebase": "^9.14.0",
