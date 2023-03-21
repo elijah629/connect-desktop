@@ -106,7 +106,7 @@
 		"webpack": "^5.75.0"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.10.5",
+		"@emotion/react": "^11.10.6",
 		"@emotion/styled": "^11.10.5",
 		"@msgpack/msgpack": "^2.8.0",
 		"@mui/material": "^5.10.15",
