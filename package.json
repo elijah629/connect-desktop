@@ -112,7 +112,7 @@
 		"@mui/material": "^5.10.15",
 		"electron-settings": "^4.0.2",
 		"electron-squirrel-startup": "^1.0.0",
-		"firebase": "^9.14.0",
+		"firebase": "^9.15.0",
 		"marked": "^4.2.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
